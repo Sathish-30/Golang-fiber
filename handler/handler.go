@@ -1,21 +1,14 @@
-package book
+package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/sathish-30/Golang-fiber/database"
-	"gorm.io/gorm"
+	"github.com/sathish-30/Golang-fiber/model"
 )
-
-type Book struct {
-	gorm.Model
-	Title  string `json:"title"`
-	Author string `json:"author"`
-	Rating int    `json:"rating"`
-}
 
 func GetBooks(c *fiber.Ctx) error {
 	db := database.DBConn
-	var books []Book
+	var books []model.Book
 	db.Find(&books)
 	return c.JSON(books)
 }
@@ -23,14 +16,14 @@ func GetBooks(c *fiber.Ctx) error {
 func GetBook(c *fiber.Ctx) error {
 	id := c.Params("id")
 	db := database.DBConn
-	var book Book
+	var book model.Book
 	db.Find(&book, id)
 	return c.JSON(book)
 }
 
 func NewBook(c *fiber.Ctx) error {
 	db := database.DBConn
-	book := new(Book)
+	book := new(model.Book)
 	if err := c.BodyParser(book); err != nil {
 		return c.Status(503).SendString(err.Error())
 	}
@@ -41,7 +34,7 @@ func NewBook(c *fiber.Ctx) error {
 func DeleteBook(c *fiber.Ctx) error {
 	id := c.Params("id")
 	db := database.DBConn
-	var book Book
+	var book model.Book
 	db.First(&book, id)
 	if book.Title == "" {
 		return c.Status(500).SendString("No Book found with the given ID")
