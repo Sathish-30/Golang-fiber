@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
+	_ "github.com/gofiber/fiber/v2"
 	"github.com/sathish-30/Golang-fiber/database"
 	"github.com/sathish-30/Golang-fiber/model"
 )
